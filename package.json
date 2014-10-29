@@ -1,0 +1,30 @@
+{
+  "name": "roads-client",
+  "version": "0.0.1",
+  "author": {
+    "name": "Aaron Hedges",
+    "email": "aaron@dashron.com",
+    "url": "www.dashron.com"
+  },
+  "description": "A client library for interacting with Roads in node, or the browser",
+  "keywords": ["roads", "http"],
+  "homepage": "https://github.com/Dashron/roads-client",
+  "scripts": {
+    "test": "node --harmony ./node_modules/nodeunit/bin/nodeunit ./tests/*"
+  },
+  "bugs": { 
+    "url" : "http://github.com/Dashron/roads-client/issues", 
+    "email" : "aaron@dashron.com"
+  },
+  "repository" : { 
+    "type" : "git",
+     "url" : "git://github.com/Dashron/roads-client.git"
+  },
+  "dependencies": {
+    "bluebird": "2.3.2"
+  },
+  "devDependencies": {
+    "nodeunit": "0.9.0",
+    "roads": "2.0.0"
+  }
+}
