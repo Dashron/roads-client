@@ -2,3 +2,4 @@
 .settings
 roads-client.sublime-project
 roads-client.sublime-workspace
+node_modules
