@@ -40,6 +40,10 @@ api.onRequest(function (method, url, body, headers, next) {
 				default:
 					return new roads.Response(unknownRepresentation(err), 500);
 			}
+		}).then(function(response){
+			response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8080';
+			response.headers['Access-Control-Allow-Credentials'] = true;
+			return response;
 		});
 });//*/
 
