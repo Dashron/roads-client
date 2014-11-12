@@ -1,15 +1,15 @@
 "use strict";
 
-module.exports = function (client, callback) {
-	return client.request('GET', '/users')
+module.exports = function () {
+	return this.client.request('GET', '/users')
 		.then(function (users) {
 			console.log(users);
+			var body = [];
 
-			return client.request('GET', '/fakeurl');
-		})
-		.then(function (error) {
-			console.log(error);
-			// Kill the server once the requests have been made
-			callback();
+			for(var i = 0; i < users.data.total; i++) {
+				body.push(users.data.collection[i].name);
+			}
+
+			return body.join(',') + '<br />Last updated on ' + new Date() + ' <a id="refresh" href="/">Refresh</a>';
 		});
 };

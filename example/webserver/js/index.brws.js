@@ -1,17 +1,17 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
-module.exports = function (client, callback) {
-	return client.request('GET', '/users')
+module.exports = function () {
+	return this.client.request('GET', '/users')
 		.then(function (users) {
 			console.log(users);
+			var body = [];
 
-			return client.request('GET', '/fakeurl');
-		})
-		.then(function (error) {
-			console.log(error);
-			// Kill the server once the requests have been made
-			callback();
+			for(var i = 0; i < users.data.total; i++) {
+				body.push(users.data.collection[i].name);
+			}
+
+			return body.join(',') + '<br />Last updated on ' + new Date() + ' <a id="refresh" href="/">Refresh</a>';
 		});
 };
 },{}],2:[function(require,module,exports){
@@ -21,9 +21,22 @@ var port = 8081;
 var controller = require('../../controller.js');
 var client = new (require('../../../index.js').Client)('localhost', port);
 
-controller(client, function () {
-	console.log('complete');
-});
+var refresh = function (event) {
+	event.preventDefault();
+	console.log('clicked!');
+	controller.call({
+		client: client
+	}).then(function(html) {
+		document.getElementById('content').innerHTML = html;
+		assignHandler();
+	});
+};
+
+var assignHandler = function () {
+	document.getElementById('refresh').addEventListener('click', refresh);
+};
+
+assignHandler();
 },{"../../../index.js":3,"../../controller.js":1}],3:[function(require,module,exports){
 module.exports.Client = require('./lib/client.js');
 },{"./lib/client.js":4}],4:[function(require,module,exports){
@@ -81,8 +94,6 @@ Client.prototype._responseHandler = function (accept) {
 
 	return function (response) {
 		var response_body = '';
-
-		//response.setEncoding('utf8');
 
 		response.on('data', function (chunk) {
 			response_body += chunk;

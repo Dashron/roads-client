@@ -3,10 +3,9 @@
 var koa = require('koa');
 var app = koa();
 var fs = require('fs');
-
-var home = function () {
-	return 'Home <script src="/js/index.brws.js"></script>';
-};
+var controller = require('../controller.js');
+var api_port = 8081;
+var client = new (require('../../index.js').Client)('localhost', api_port);
 
 var loadFile = function () {
 	return fs.readFileSync(__dirname + this.path, {
@@ -14,17 +13,19 @@ var loadFile = function () {
 	});
 };
 
-var loadController = function () {
-	return fs.readFileSync(__dirname + '/../controller.js', {
-		encoding : 'utf8'
-	});
+var applyLayout = function (contents) {
+	return '<div id="content">' + contents + '</div><script src="/js/index.brws.js"></script>';
 };
 
 app.use(function *(){
 	console.log(this.path);
 	switch (this.path) {
 		case "/":
-			this.body = home.call(this);
+			
+			this.body = applyLayout(yield controller.call({
+				client: client
+			}));
+
 			this.response.header['content-type'] = 'text/html';
 			break;
 		case "/js/index.brws.js":
@@ -39,4 +40,4 @@ app.listen(3000);
 
 
 module.exports.server = app;
-module.exports.apiport = 8081;
+module.exports.apiport = api_port;
