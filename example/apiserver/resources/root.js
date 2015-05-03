@@ -3,7 +3,6 @@
 var roads = require('roads');
 var Resource = roads.Resource;
 var Response = roads.Response;
-var Promise = require('bluebird');
 
 /**
  * [one description]

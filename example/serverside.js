@@ -10,6 +10,12 @@ server.listen(port, function () {
 	console.log('server has started');
 });
 
-controller(client, function () {
-	server.close();
-});
+controller(client)
+	.then(function (response) {
+		console.log(response);
+		server.close();
+	})
+	.catch(function (err) {
+		console.log(err);
+		server.close();
+	});

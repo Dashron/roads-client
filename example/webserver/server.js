@@ -22,9 +22,7 @@ app.use(function *(){
 	switch (this.path) {
 		case "/":
 			
-			this.body = applyLayout(yield controller.call({
-				client: client
-			}));
+			this.body = applyLayout(yield controller(client));
 
 			this.response.header['content-type'] = 'text/html';
 			break;
